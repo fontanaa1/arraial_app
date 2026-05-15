@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Arraiá Festival</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f172a',
+                        secondary: '#f97316',
+                        danger: '#dc2626'
+                    }
+                }
+            }
+        }
+    </script>
+
+</head>
+
+<body class="bg-orange-50">
+
+    <!-- ===================================== -->
+    <!-- HEADER -->
+    <!-- ===================================== -->
+
+    <header class="relative h-[520px] overflow-hidden bg-primary">
+
+        <img
+            src="https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1974&auto=format&fit=crop"
+            class="absolute inset-0 w-full h-full object-cover opacity-40">
+
+        <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-primary"></div>
+
+        <!-- NAVBAR -->
+        <div class="relative z-20 flex justify-between items-center p-6">
+
+            <h1 class="text-3xl font-black text-white">
+                🎪 Arraiá Festival
+            </h1>
+
+            <div class="flex gap-3">
+
+                <button
+                    class="bg-white text-primary px-5 py-2 rounded-xl font-bold">
+                    Entrar
+                </button>
+
+                <button
+                    class="bg-secondary text-white px-5 py-2 rounded-xl font-bold">
+                    Cadastro
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- HERO -->
+        <div class="relative z-10 flex flex-col justify-center h-full px-8 max-w-5xl">
+
+            <h2 class="text-6xl font-black text-white leading-tight">
+                Os Maiores<br>
+                Shows Juninos 🎤
+            </h2>
+
+            <p class="text-orange-200 text-2xl mt-6 max-w-2xl">
+                Compre ingressos para os melhores artistas do Brasil
+            </p>
+
+            <button
+                class="mt-8 bg-secondary hover:opacity-90 transition text-white w-fit px-8 py-4 rounded-2xl font-black text-xl shadow-xl">
+                Comprar Agora
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- ===================================== -->
+    <!-- CATEGORIAS -->
+    <!-- ===================================== -->
+
+    <section class="max-w-7xl mx-auto px-6 mt-12">
+
+        <h2 class="text-4xl font-black text-primary mb-8">
+            Categorias
+        </h2>
+
+        <div
+            id="categorias"
+            class="flex gap-4 overflow-x-auto pb-4">
+
+            <button
+                onclick="carregarShows('Sertanejo')"
+                class="bg-primary text-white px-6 py-3 rounded-2xl font-bold whitespace-nowrap">
+                Sertanejo
+            </button>
+
+            <button
+                onclick="carregarShows('Forró')"
+                class="bg-secondary text-white px-6 py-3 rounded-2xl font-bold whitespace-nowrap">
+                Forró
+            </button>
+
+            <button
+                onclick="carregarShows('Piseiro')"
+                class="bg-danger text-white px-6 py-3 rounded-2xl font-bold whitespace-nowrap">
+                Piseiro
+            </button>
+
+            <button
+                onclick="carregarShows('Pagode')"
+                class="bg-primary text-white px-6 py-3 rounded-2xl font-bold whitespace-nowrap">
+                Pagode
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- ===================================== -->
+    <!-- SHOWS -->
+    <!-- ===================================== -->
+
+    <section class="max-w-7xl mx-auto px-6 mt-14">
+
+        <div class="flex justify-between items-center mb-10">
+
+            <h2 class="text-5xl font-black text-primary">
+                Shows 🔥
+            </h2>
+
+            <button
+                onclick="abrirCarrinho()"
+                class="bg-danger text-white px-6 py-3 rounded-2xl font-bold shadow-lg">
+                🛒 Carrinho
+            </button>
+
+        </div>
+
+        <div
+            id="lista-shows"
+            class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+
+        </div>
+
+    </section>
+
+    <!-- ===================================== -->
+    <!-- MODAL SHOW -->
+    <!-- ===================================== -->
+
+    <div
+        id="modal-show"
+        class="fixed inset-0 bg-black/70 z-50 hidden justify-center items-center p-4">
+
+        <div
+            class="bg-white max-w-xl w-full rounded-3xl overflow-hidden">
+
+            <img
+                id="modal-img"
+                src=""
+                class="w-full h-80 object-cover">
+
+            <div class="p-6">
+
+                <div class="flex justify-between items-start">
+
+                    <div>
+
+                        <h2
+                            id="modal-nome"
+                            class="text-4xl font-black text-primary">
+                        </h2>
+
+                        <p
+                            id="modal-categoria"
+                            class="text-secondary font-bold mt-2">
+                        </p>
+
+                    </div>
+
+                    <button
+                        onclick="fecharModal()"
+                        class="text-4xl font-black text-gray-400">
+                        ×
+                    </button>
+
+                </div>
+
+                <p
+                    id="modal-descricao"
+                    class="text-gray-500 mt-5 leading-relaxed">
+                </p>
+
+                <div class="mt-6 space-y-3">
+
+                    <p id="modal-local"></p>
+
+                    <p id="modal-data"></p>
+
+                    <p id="modal-horario"></p>
+
+                </div>
+
+                <div class="flex justify-between items-center mt-10">
+
+                    <span
+                        id="modal-preco"
+                        class="text-4xl font-black text-danger">
+                    </span>
+
+                    <button
+                        id="btn-comprar"
+                        class="bg-secondary text-white px-8 py-4 rounded-2xl font-black text-lg">
+                        Comprar Ingresso
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- MODAL CARRINHO -->
+    <!-- ===================================== -->
+
+    <div
+        id="modal-carrinho"
+        class="fixed inset-0 bg-black/70 z-50 hidden justify-center items-center p-4">
+
+        <div
+            class="bg-white max-w-2xl w-full rounded-3xl p-6">
+
+            <div class="flex justify-between items-center mb-8">
+
+                <h2 class="text-4xl font-black text-primary">
+                    Seu Carrinho 🛒
+                </h2>
+
+                <button
+                    onclick="fecharCarrinho()"
+                    class="text-4xl text-gray-400 font-black">
+                    ×
+                </button>
+
+            </div>
+
+            <div
+                id="carrinho-itens"
+                class="space-y-5 max-h-[400px] overflow-y-auto">
+
+            </div>
+
+            <div class="mt-8 border-t pt-6">
+
+                <div class="flex justify-between items-center">
+
+                    <span class="text-2xl font-black">
+                        Total
+                    </span>
+
+                    <span
+                        id="total-carrinho"
+                        class="text-4xl font-black text-danger">
+                        R$ 0
+                    </span>
+
+                </div>
+
+                <button
+                    onclick="finalizarCompra()"
+                    class="w-full mt-6 bg-secondary text-white py-5 rounded-2xl font-black text-xl">
+                    Finalizar Compra 🎟️
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===================================== -->
+    <!-- FOOTER -->
+    <!-- ===================================== -->
+
+    <footer class="bg-primary mt-20 text-white p-10">
+
+        <div class="max-w-7xl mx-auto">
+
+            <h2 class="text-4xl font-black">
+                🎪 Arraiá Festival
+            </h2>
+
+            <p class="text-orange-200 mt-4">
+                Os melhores shows juninos do Brasil
+            </p>
+
+            <div class="mt-8 space-y-2">
+
+                <p>📍 Sorocaba - SP</p>
+
+                <p>📞 (15) 99999-9999</p>
+
+                <p>📸 @arraiafestival</p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+    <!-- ===================================== -->
+    <!-- SCRIPT -->
+    <!-- ===================================== -->
+
+    <script>
+
+        // =====================================
+        // API
+        // =====================================
+
+        const API_URL = 'https://SEU-PROJETO.vercel.app/api'
+
+        // =====================================
+        // ELEMENTOS
+        // =====================================
+
+        const listaShows = document.getElementById('lista-shows')
+
+        // =====================================
+        // CARRINHO
+        // =====================================
+
+        let carrinho = []
+
+        // =====================================
+        // CARREGAR SHOWS
+        // =====================================
+
+        async function carregarShows(categoria = '') {
+
+            try {
+
+                const response = await fetch(`${API_URL}/agenda`)
+
+                const shows = await response.json()
+
+                let filtrados = shows
+
+                if(categoria){
+
+                    filtrados = shows.filter(
+                        show => show.categoria === categoria
+                    )
+                }
+
+                renderizarShows(filtrados)
+
+            } catch(err){
+
+                console.log(err)
+
+            }
+
+        }
+
+        // =====================================
+        // RENDERIZAR SHOWS
+        // =====================================
+
+        function renderizarShows(shows){
+
+            listaShows.innerHTML = ''
+
+            shows.forEach(show => {
+
+                listaShows.innerHTML += `
+
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-xl hover:scale-[1.02] transition-all">
+
+                        <img
+                            src="${show.imagem}"
+                            class="w-full h-72 object-cover">
+
+                        <div class="p-5">
+
+                            <h2 class="text-3xl font-black text-primary">
+                                ${show.nome}
+                            </h2>
+
+                            <p class="text-gray-500 mt-3">
+                                ${show.descricao}
+                            </p>
+
+                            <div class="mt-5 space-y-2">
+
+                                <p class="font-bold text-secondary">
+                                    📍 ${show.local_show}
+                                </p>
+
+                                <p class="text-gray-500">
+                                    🗓️ ${show.data_show}
+                                </p>
+
+                                <p class="text-gray-500">
+                                    ⏰ ${show.horario}
+                                </p>
+
+                            </div>
+
+                            <div class="flex justify-between items-center mt-8">
+
+                                <span class="text-danger text-3xl font-black">
+                                    R$ ${show.preco}
+                                </span>
+
+                                <button
+                                    onclick='abrirModal(${JSON.stringify(show)})'
+                                    class="bg-secondary text-white px-6 py-3 rounded-2xl font-bold">
+                                    Comprar
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `
+            })
+
+        }
+
+        // =====================================
+        // MODAL
+        // =====================================
+
+        function abrirModal(show){
+
+            document.getElementById('modal-show').classList.remove('hidden')
+            document.getElementById('modal-show').classList.add('flex')
+
+            document.getElementById('modal-img').src = show.imagem
+            document.getElementById('modal-nome').innerText = show.nome
+            document.getElementById('modal-categoria').innerText = show.categoria
+            document.getElementById('modal-descricao').innerText = show.descricao
+
+            document.getElementById('modal-local').innerText =
+                '📍 ' + show.local_show
+
+            document.getElementById('modal-data').innerText =
+                '🗓️ ' + show.data_show
+
+            document.getElementById('modal-horario').innerText =
+                '⏰ ' + show.horario
+
+            document.getElementById('modal-preco').innerText =
+                'R$ ' + show.preco
+
+            document.getElementById('btn-comprar').onclick = () => {
+                adicionarCarrinho(show)
+            }
+
+        }
+
+        function fecharModal(){
+
+            document.getElementById('modal-show').classList.add('hidden')
+
+        }
+
+        // =====================================
+        // CARRINHO
+        // =====================================
+
+        function adicionarCarrinho(show){
+
+            carrinho.push(show)
+
+            atualizarCarrinho()
+
+            fecharModal()
+
+            alert('Ingresso adicionado 🎟️')
+
+        }
+
+        function atualizarCarrinho(){
+
+            const container =
+                document.getElementById('carrinho-itens')
+
+            container.innerHTML = ''
+
+            let total = 0
+
+            carrinho.forEach((item, index) => {
+
+                total += Number(item.preco)
+
+                container.innerHTML += `
+
+                    <div class="flex justify-between items-center border-b pb-4">
+
+                        <div>
+
+                            <h3 class="text-2xl font-black">
+                                ${item.nome}
+                            </h3>
+
+                            <p class="text-gray-500 mt-1">
+                                ${item.data_show}
+                            </p>
+
+                        </div>
+
+                        <div class="text-right">
+
+                            <p class="text-danger text-2xl font-black">
+                                R$ ${item.preco}
+                            </p>
+
+                            <button
+                                onclick="removerItem(${index})"
+                                class="text-sm text-red-500 mt-2">
+                                Remover
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `
+            })
+
+            document.getElementById('total-carrinho').innerText =
+                `R$ ${total}`
+
+        }
+
+        function removerItem(index){
+
+            carrinho.splice(index, 1)
+
+            atualizarCarrinho()
+
+        }
+
+        function abrirCarrinho(){
+
+            document.getElementById('modal-carrinho')
+                .classList.remove('hidden')
+
+            document.getElementById('modal-carrinho')
+                .classList.add('flex')
+
+        }
+
+        function fecharCarrinho(){
+
+            document.getElementById('modal-carrinho')
+                .classList.add('hidden')
+
+        }
+
+        // =====================================
+        // FINALIZAR
+        // =====================================
+
+        async function finalizarCompra(){
+
+            if(carrinho.length === 0){
+
+                alert('Carrinho vazio')
+
+                return
+            }
+
+            alert('Compra realizada 🎉')
+
+            carrinho = []
+
+            atualizarCarrinho()
+
+            fecharCarrinho()
+
+        }
+
+        // =====================================
+        // INICIAR
+        // =====================================
+
+        carregarShows()
+
+    </script>
+
+</body>
+
+</html>

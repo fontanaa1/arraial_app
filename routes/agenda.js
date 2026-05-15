@@ -1,31 +1,50 @@
-const express = require('express');
+const express = require('express')
 
-const router = express.Router();
+const router = express.Router()
 
-const supabase = require('../data/supabase');
+const supabase = require('../data/supabase')
 
-router.get('/', async (req, res, next) => {
+// =====================================
+// LISTAR SHOWS
+// =====================================
 
-    try {
+router.get('/', async (req, res) => {
 
-        const { data, error } = await supabase
-            .from('agenda')
-            .select('*')
-            .order('id');
+    const { data, error } = await supabase
+        .from('shows')
+        .select('*')
+        .order('data_show', {
+            ascending: true
+        })
 
-        if (error) throw error;
+    if(error){
 
-        res.json({
-            sucesso: true,
-            agenda: data
-        });
-
-    } catch (err) {
-
-        next(err);
-
+        return res.status(500).json(error)
     }
 
-});
+    res.json(data)
+})
 
-module.exports = router;
+// =====================================
+// SHOW POR ID
+// =====================================
+
+router.get('/:id', async (req, res) => {
+
+    const { id } = req.params
+
+    const { data, error } = await supabase
+        .from('shows')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+    if(error){
+
+        return res.status(500).json(error)
+    }
+
+    res.json(data)
+})
+
+module.exports = router

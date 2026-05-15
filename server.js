@@ -6,9 +6,6 @@ const logger = require('./middlewares/logger');
 
 const errorHandler = require('./middlewares/errorHandler');
 
-const rotasBarraquinhas = require('./routes/barraquinhas');
-const rotasProdutos = require('./routes/produtos');
-const rotasReceitas = require('./routes/receitas');
 const rotasAgenda = require('./routes/agenda');
 const rotasBilhetes = require('./routes/bilhetes');
 const rotasUsuarios = require('./routes/usuarios');
@@ -30,7 +27,7 @@ app.get('/', (req, res) => {
 
     res.json({
         sucesso: true,
-        mensagem: '🎪 API Arraiá App funcionando!'
+        mensagem: '🎤 API Arraiá Festival funcionando!'
     });
 
 });
@@ -39,12 +36,6 @@ app.get('/', (req, res) => {
 // ======================================================
 // ROTAS
 // ======================================================
-
-app.use('/api/barraquinhas', rotasBarraquinhas);
-
-app.use('/api/produtos', rotasProdutos);
-
-app.use('/api/receitas', rotasReceitas);
 
 app.use('/api/agenda', rotasAgenda);
 
@@ -84,7 +75,7 @@ app.listen(PORT, () => {
 
     console.log('');
     console.log('=================================');
-    console.log('🎪 ARRAIÁ APP ONLINE');
+    console.log('🎤 ARRAIÁ FESTIVAL ONLINE');
     console.log(`🔥 http://localhost:${PORT}`);
     console.log('=================================');
     console.log('');

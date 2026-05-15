@@ -1,75 +1,64 @@
-const express = require('express');
+const express = require('express')
 
-const router = express.Router();
+const router = express.Router()
 
-const supabase = require('../data/supabase');
+const supabase = require('../data/supabase')
 
-router.get('/', async (req, res, next) => {
+// =====================================
+// COMPRAR INGRESSO
+// =====================================
 
-    try {
+router.post('/', async (req, res) => {
 
-        const { data, error } = await supabase
-            .from('bilhetes')
-            .select('*')
-            .order('criado_em', {
-                ascending: false
-            });
+    const {
+        usuario_id,
+        show_id,
+        quantidade,
+        total
+    } = req.body
 
-        if (error) throw error;
+    const { data, error } = await supabase
+        .from('ingressos')
+        .insert({
+            usuario_id,
+            show_id,
+            quantidade,
+            total
+        })
 
-        res.json({
-            sucesso: true,
-            bilhetes: data
-        });
+    if(error){
 
-    } catch (err) {
-
-        next(err);
-
+        return res.status(500).json(error)
     }
 
-});
+    res.json({
+        sucesso: true,
+        data
+    })
+})
 
+// =====================================
+// LISTAR INGRESSOS
+// =====================================
 
-router.post('/', async (req, res, next) => {
+router.get('/:usuario_id', async (req, res) => {
 
-    try {
+    const { usuario_id } = req.params
 
-        const {
-            de_nome,
-            para_nome,
-            mensagem,
-            anonimo
-        } = req.body;
+    const { data, error } = await supabase
+        .from('ingressos')
+        .select(`
+            *,
+            shows (*)
+        `)
+        .eq('usuario_id', usuario_id)
 
+    if(error){
 
-        const { data, error } = await supabase
-            .from('bilhetes')
-            .insert([
-                {
-                    de_nome,
-                    para_nome,
-                    mensagem,
-                    anonimo
-                }
-            ])
-            .select();
-
-
-        if (error) throw error;
-
-
-        res.status(201).json({
-            sucesso: true,
-            bilhete: data[0]
-        });
-
-    } catch (err) {
-
-        next(err);
-
+        return res.status(500).json(error)
     }
 
-});
+    res.json(data)
+})
 
-module.exports = router;
+module.exports = router
