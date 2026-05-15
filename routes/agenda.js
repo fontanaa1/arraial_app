@@ -15,11 +15,8 @@ router.get('/', async (req, res) => {
             categorias ( nome )
         `)
 
-    if (error) {
-        return res.status(500).json(error)
-    }
+    if (error) return res.status(500).json(error)
 
-    // Mapeia categoria para manter compatibilidade com o HTML
     const shows = data.map(s => ({
         ...s,
         categoria: s.categorias?.nome
@@ -45,9 +42,7 @@ router.get('/:id', async (req, res) => {
         .eq('id', id)
         .single()
 
-    if (error) {
-        return res.status(500).json(error)
-    }
+    if (error) return res.status(500).json(error)
 
     const show = { ...data, categoria: data.categorias?.nome }
 
