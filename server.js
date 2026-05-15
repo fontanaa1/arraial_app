@@ -9,6 +9,9 @@ const errorHandler = require('./middlewares/errorHandler');
 const rotasAgenda = require('./routes/agenda');
 const rotasBilhetes = require('./routes/bilhetes');
 const rotasUsuarios = require('./routes/usuarios');
+const usuariosRouter = require('./routes/usuarios')
+const ingressosRouter = require('./routes/ingressos')
+
 
 const app = express();
 
@@ -43,6 +46,9 @@ app.use('/api/bilhetes', rotasBilhetes);
 
 app.use('/api/usuarios', rotasUsuarios);
 
+app.use('/api/usuarios', usuariosRouter);
+
+app.use('/api/ingressos', ingressosRouter);
 
 // ======================================================
 // 404
