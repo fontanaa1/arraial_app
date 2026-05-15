@@ -10,13 +10,12 @@ const supabase = require('../data/supabase')
 
 router.get('/', async (req, res) => {
 
-    const { data, error } = await supabase
-        .from('shows')
-        .select('*')
-        .order('data_show', {
-            ascending: true
-        })
-
+   const { data, error } = await supabase
+  .from('shows')
+  .select(`
+    *,
+    categorias ( nome )
+  `)
     if(error){
 
         return res.status(500).json(error)
