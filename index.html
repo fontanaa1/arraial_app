@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arraiá Festival</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10002b',
+                        secondary: '#f97316',
+                        accent: '#ffbe0b',
+                        danger: '#dc2626',
+                        card: '#1a0040',
+                        pink: '#ec4899',
+                        green: '#10b981'
+                    },
+                    fontFamily: {
+                        display: ['Bebas Neue', 'cursive'],
+                        body: ['Nunito', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background-color: #0a0015;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(139, 0, 255, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 10%, rgba(249, 115, 22, 0.07) 0%, transparent 50%);
+        }
+
+        .font-display {
+            font-family: 'Bebas Neue', cursive;
+        }
+
+        /* Grain overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* Navbar glass */
+        nav {
+            background: rgba(16, 0, 43, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* Hero gradient */
+        .hero-gradient {
+            background: linear-gradient(to bottom,
+                    rgba(10, 0, 21, 0.3) 0%,
+                    rgba(10, 0, 21, 0.6) 50%,
+                    rgba(10, 0, 21, 1) 100%);
+        }
+
+        /* Category pill active */
+        .cat-btn {
+            transition: all 0.2s;
+        }
+
+        .cat-btn:hover,
+        .cat-btn.active {
+            background: #f97316;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(249, 115, 22, 0.4);
+        }
+
+        /* Show card */
+        .show-card {
+            background: linear-gradient(145deg, #1a0040, #0f0025);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+        }
+
+        .show-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(249, 115, 22, 0.3);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(249, 115, 22, 0.15);
+        }
+
+        .show-card img {
+            transition: transform 0.5s ease;
+        }
+
+        .show-card:hover img {
+            transform: scale(1.06);
+        }
+
+        /* Glow button */
+        .btn-glow {
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            box-shadow: 0 4px 20px rgba(249, 115, 22, 0.5);
+            transition: all 0.2s;
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(249, 115, 22, 0.7);
+        }
+
+        /* Pink glow button */
+        .btn-pink-glow {
+            background: linear-gradient(135deg, #ec4899, #f472b6);
+            box-shadow: 0 4px 20px rgba(236, 72, 153, 0.5);
+            transition: all 0.2s;
+        }
+
+        .btn-pink-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(236, 72, 153, 0.7);
+        }
+
+        /* Green glow button */
+        .btn-green-glow {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5);
+            transition: all 0.2s;
+        }
+
+        .btn-green-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.7);
+        }
+
+        /* Modal */
+        .modal-inner {
+            background: linear-gradient(160deg, #1a0040, #0a0015);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0015;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #f97316;
+            border-radius: 9999px;
+        }
+
+        /* Loading pulse */
+        @keyframes shimmer {
+            0% {
+                background-position: -400px 0;
+            }
+
+            100% {
+                background-position: 400px 0;
+            }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #1a0040 25%, #2d0060 50%, #1a0040 75%);
+            background-size: 800px 100%;
+            animation: shimmer 1.6s infinite;
+        }
+
+        /* Tag badge */
+        .badge {
+            background: rgba(249, 115, 22, 0.15);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            color: #fb923c;
+        }
+
+        /* Cart badge */
+        #cart-count {
+            background: #dc2626;
+            min-width: 20px;
+            height: 20px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 800;
+            position: absolute;
+            top: -6px;
+            right: -6px;
+        }
+
+        /* Splash screen */
+        .splash-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: linear-gradient(160deg, #10002b, #0a0015);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Heart animation */
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.3);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.2);
+            }
+
+            60% {
+                transform: scale(1);
+            }
+        }
+
+        .heartbeat {
+            animation: heartbeat 1.5s infinite;
+        }
+
+        /* Chat message animation */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-message {
+            animation: slideUp 0.3s ease;
+        }
+
+        /* Floating hearts */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: floatUp 1.5s ease-out forwards;
+        }
+
+        /* Food card */
+        .food-card {
+            background: linear-gradient(145deg, #1a0040, #0f0025);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s;
+        }
+
+        .food-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Tab button */
+        .tab-btn {
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #f97316;
+            border-radius: 2px;
+        }
+
+        /* Input focus */
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: rgba(249, 115, 22, 0.5);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+        }
+
+        /* Fogueira que segue o mouse */
+        .fogueira-seguidor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: left 0.15s ease-out, top 0.15s ease-out;
+            filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.8));
+        }
+
+        .fogueira-container {
+            position: relative;
+            width: 60px;
+            height: 80px;
+        }
+
+        /* Chamas */
+        .chama {
+            position: absolute;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: chamaDanca 0.8s infinite alternate ease-in-out;
+            opacity: 0.9;
+        }
+
+        .chama-1 {
+            width: 30px;
+            height: 40px;
+            background: linear-gradient(to top, #f97316, #ffbe0b, #fef08a);
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 0s;
+        }
+
+        .chama-2 {
+            width: 20px;
+            height: 30px;
+            background: linear-gradient(to top, #ea580c, #fb923c, #fde68a);
+            bottom: 38px;
+            left: 35%;
+            transform: translateX(-50%) rotate(-15deg);
+            animation-delay: 0.2s;
+        }
+
+        .chama-3 {
+            width: 18px;
+            height: 28px;
+            background: linear-gradient(to top, #c2410c, #f97316, #fde047);
+            bottom: 37px;
+            left: 65%;
+            transform: translateX(-50%) rotate(15deg);
+            animation-delay: 0.4s;
+        }
+
+        /* Fogueira (lenha) */
+        .lenha {
+            position: absolute;
+            background: linear-gradient(to right, #451a03, #78350f, #451a03);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .lenha-1 {
+            width: 50px;
+            height: 10px;
+            bottom: 20px;
+            left: 5px;
+            transform: rotate(-10deg);
+        }
+
+        .lenha-2 {
+            width: 50px;
+            height: 10px;
+            bottom: 15px;
+            left: 5px;
+            transform: rotate(10deg);
+        }
+
+        .lenha-3 {
+            width: 45px;
+            height: 8px;
+            bottom: 10px;
+            left: 8px;
+        }
+
+        /* Fagulhas */
+        .fagulha {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffbe0b;
+            border-radius: 50%;
+            animation: fagulhaSobe 1.5s infinite;
+            opacity: 0;
+        }
+
+        .fagulha-1 {
+            left: 20px;
+            bottom: 40px;
+            animation-delay: 0s;
+        }
+
+        .fagulha-2 {
+            left: 35px;
+            bottom: 42px;
+            animation-delay: 0.4s;
+        }
+
+        .fagulha-3 {
+            left: 28px;
+            bottom: 38px;
+            animation-delay: 0.8s;
+        }
+
+        .fagulha-4 {
+            left: 40px;
+            bottom: 36px;
+            animation-delay: 1.2s;
+        }
+
+        @keyframes chamaDanca {
+            0% {
+                transform: translateX(-50%) scaleY(1) scaleX(1);
+                border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            }
+
+            50% {
+                transform: translateX(-50%) scaleY(1.2) scaleX(0.9);
+                border-radius: 40% 60% 50% 50% / 50% 60% 40% 50%;
+            }
+
+            100% {
+                transform: translateX(-50%) scaleY(0.9) scaleX(1.1);
+                border-radius: 55% 45% 55% 45% / 60% 50% 50% 40%;
+            }
+        }
+
+        @keyframes fagulhaSobe {
+            0% {
+                opacity: 0;
+                transform: translateY(0) translateX(0) scale(1);
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-60px) translateX(var(--fagulha-x, 10px)) scale(0);
+            }
+        }
+
+        /* Efeito de calor */
+        .calor-ondas {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 20px;
+            background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: calorPulsa 2s infinite;
+        }
+
+        @keyframes calorPulsa {
+
+            0%,
+            100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.5);
+                opacity: 0.2;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-white relative">
+
+    <!-- Fogueira que segue o mouse -->
+    <div id="fogueira-mouse" class="fogueira-seguidor">
+        <div class="fogueira-container">
+            <!-- Chamas -->
+            <div class="chama chama-1"></div>
+            <div class="chama chama-2"></div>
+            <div class="chama chama-3"></div>
+            <!-- Lenha -->
+            <div class="lenha lenha-1"></div>
+            <div class="lenha lenha-2"></div>
+            <div class="lenha lenha-3"></div>
+            <!-- Fagulhas -->
+            <div class="fagulha fagulha-1"></div>
+            <div class="fagulha fagulha-2"></div>
+            <div class="fagulha fagulha-3"></div>
+            <div class="fagulha fagulha-4"></div>
+            <!-- Ondas de calor -->
+            <div class="calor-ondas"></div>
+        </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- SPLASH SCREEN -->
+    <!-- ===================================== -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="text-center px-6">
+            <div class="text-8xl mb-6 heartbeat">🎪</div>
+            <h1 class="font-display text-6xl md:text-8xl text-white tracking-wide mb-4">
+                Arraiá<br>Festival
+            </h1>
+            <p class="text-white/50 text-lg mb-10 font-semibold">A maior festa junina da região!</p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="mostrarLogin()" class="btn-glow text-white px-10 py-4 rounded-xl font-bold text-lg">
+                    🔑 Entrar
+                </button>
+                <button onclick="mostrarCadastro()"
+                    class="bg-white/10 hover:bg-white/20 border-2 border-white/20 text-white px-10 py-4 rounded-xl font-bold text-lg transition">
+                    ✨ Criar Conta
+                </button>
+            </div>
+
+            <button onclick="pularSplash()" class="mt-8 text-white/30 hover:text-white/60 text-sm underline transition">
+                Entrar como visitante
+            </button>
+        </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- MODAL LOGIN -->
+    <!-- ===================================== -->
+    <div id="modal-login"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[10000] hidden justify-center items-center p-4"
+        onclick="if(event.target===this)fecharLogin()">
+        <div class="modal-inner max-w-md w-full rounded-3xl p-8 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-display text-4xl text-white tracking-wide">Entrar</h2>
+                <button onclick="fecharLogin()"
+                    class="bg-white/10 hover:bg-white/20 text-white w-9 h-9 rounded-full flex items-center justify-center font-black text-lg transition">×</button>
+            </div>
+
+            <form onsubmit="fazerLogin(event)" class="space-y-4">
+                <div>
+                    <label class="text-white/60 text-sm font-semibold block mb-1.5">Email</label>
+                    <input type="email" id="login-email" required
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30"
+                        placeholder="seu@email.com">
+                </div>
+                <div>
+                    <label class="text-white/60 text-sm font-semibold block mb-1.5">Senha</label>
+                    <input type="password" id="login-senha" required
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30"
+                        placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-glow w-full text-white py-3.5 rounded-xl font-bold text-base mt-2">
+                    Entrar 🎪
+                </button>
+            </form>
+
+            <p class="text-center text-white/40 text-sm mt-5">
+                Não tem conta?
+                <button onclick="fecharLogin(); mostrarCadastro()"
+                    class="text-secondary hover:underline font-bold">Cadastre-se</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- MODAL CADASTRO -->
+    <!-- ===================================== -->
+    <div id="modal-cadastro"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[10000] hidden justify-center items-center p-4"
+        onclick="if(event.target===this)fecharCadastro()">
+        <div class="modal-inner max-w-md w-full rounded-3xl p-8 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-display text-4xl text-white tracking-wide">Criar Conta</h2>
+                <button onclick="fecharCadastro()"
+                    class="bg-white/10 hover:bg-white/20 text-white w-9 h-9 rounded-full flex items-center justify-center font-black text-lg transition">×</button>
+            </div>
+
+            <form onsubmit="fazerCadastro(event)" class="space-y-4">
+                <div>
+                    <label class="text-white/60 text-sm font-semibold block mb-1.5">Nome</label>
+                    <input type="text" id="cadastro-nome" required
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30"
+                        placeholder="Seu nome">
+                </div>
+                <div>
+                    <label class="text-white/60 text-sm font-semibold block mb-1.5">Email</label>
+                    <input type="email" id="cadastro-email" required
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30"
+                        placeholder="seu@email.com">
+                </div>
+                <div>
+                    <label class="text-white/60 text-sm font-semibold block mb-1.5">Senha</label>
+                    <input type="password" id="cadastro-senha" required minlength="6"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30"
+                        placeholder="Mínimo 6 caracteres">
+                </div>
+                <button type="submit" class="btn-glow w-full text-white py-3.5 rounded-xl font-bold text-base mt-2">
+                    Criar Conta ✨
+                </button>
+            </form>
+
+            <p class="text-center text-white/40 text-sm mt-5">
+                Já tem conta?
+                <button onclick="fecharCadastro(); mostrarLogin()"
+                    class="text-secondary hover:underline font-bold">Entrar</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- NAVBAR FIXA -->
+    <!-- ===================================== -->
+    <nav class="fixed top-0 left-0 right-0 z-40 flex justify-between items-center px-6 py-4">
+        <a href="#" class="flex items-center gap-2">
+            <span class="text-2xl">🎪</span>
+            <span class="font-display text-2xl text-white tracking-wide">Arraiá Festival</span>
+        </a>
+
+        <div class="flex items-center gap-3">
+            <button onclick="mostrarLogin()"
+                class="text-white/70 hover:text-white px-4 py-2 rounded-xl font-bold text-sm transition">
+                Entrar
+            </button>
+            <button onclick="mostrarCadastro()" class="btn-glow text-white px-5 py-2 rounded-xl font-bold text-sm">
+                Cadastro
+            </button>
+            <button onclick="abrirCarrinho()"
+                class="relative bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-xl font-bold text-sm transition border border-white/10">
+                🛒
+                <span id="cart-count" class="text-white"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===================================== -->
+    <!-- HERO -->
+    <!-- ===================================== -->
+    <header class="relative h-[640px] overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1974&auto=format&fit=crop"
+            class="absolute inset-0 w-full h-full object-cover opacity-50">
+        <div class="absolute inset-0 hero-gradient"></div>
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+            <div class="absolute top-1/3 right-0 w-96 h-96 rounded-full bg-orange-500/10 blur-3xl"></div>
+            <div class="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-purple-900/20 blur-3xl"></div>
+        </div>
+
+        <div class="relative z-10 flex flex-col justify-end h-full px-8 pb-20 max-w-6xl mx-auto">
+            <div class="inline-flex items-center gap-2 badge rounded-full px-4 py-1.5 w-fit mb-6 text-sm font-bold">
+                <span>✦</span> Temporada Junina 2025
+            </div>
+            <h1 class="font-display text-7xl md:text-9xl text-white leading-none tracking-tight">
+                Os Maiores<br>
+                <span class="text-secondary">Shows</span><br>
+                Juninos
+            </h1>
+            <p class="text-white/60 text-lg mt-6 max-w-lg font-semibold">
+                Os melhores artistas do forró, sertanejo e piseiro em um só lugar. Garanta seu ingresso agora.
+            </p>
+            <div class="flex gap-4 mt-8 flex-wrap">
+                <button onclick="document.getElementById('shows-section').scrollIntoView({behavior:'smooth'})"
+                    class="btn-glow text-white px-8 py-3.5 rounded-xl font-bold text-base">
+                    Ver Shows
+                </button>
+                <button onclick="document.getElementById('correio-elegante').scrollIntoView({behavior:'smooth'})"
+                    class="btn-pink-glow text-white px-8 py-3.5 rounded-xl font-bold text-base">
+                    💌 Correio Elegante
+                </button>
+                <button onclick="document.getElementById('barraquinhas').scrollIntoView({behavior:'smooth'})"
+                    class="btn-green-glow text-white px-8 py-3.5 rounded-xl font-bold text-base">
+                    🍴 Comidas Típicas
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================================== -->
+    <!-- CATEGORIAS -->
+    <!-- ===================================== -->
+    <section class="max-w-6xl mx-auto px-6 mt-16 relative z-10">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1 h-6 bg-secondary rounded-full"></div>
+            <h2 class="text-sm font-bold text-white/50 uppercase tracking-widest">Filtrar por estilo</h2>
+        </div>
+        <div class="flex gap-3 flex-wrap">
+            <button onclick="filtrarCategoria('')" data-cat=""
+                class="cat-btn active bg-secondary text-white px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
+                Todos
+            </button>
+            <button onclick="filtrarCategoria('Forró')" data-cat="Forró"
+                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
+                🪗 Forró
+            </button>
+            <button onclick="filtrarCategoria('Funk')" data-cat="Funk"
+                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
+                🎙️ Funk
+            </button>
+            <button onclick="filtrarCategoria('Piseiro')" data-cat="Piseiro"
+                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
+                🎵 Piseiro
+            </button>
+            <button onclick="filtrarCategoria('Pagode')" data-cat="Pagode"
+                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
+                🥁 Pagode
+            </button>
+            <button onclick="filtrarCategoria('Sertanejo')" data-cat="Sertanejo"
+                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
+                🤠 Sertanejo
+            </button>
+            <button onclick="filtrarCategoria('Trap')" data-cat="Trap"
+                class="cat-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap">
+                💎 Trap
+            </button>
+        </div>
+    </section>
+
+    <!-- ===================================== -->
+    <!-- SHOWS -->
+    <!-- ===================================== -->
+    <section id="shows-section" class="max-w-6xl mx-auto px-6 mt-12 pb-24 relative z-10">
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <h2 class="font-display text-5xl text-white tracking-wide">Agenda de Shows</h2>
+                <p id="shows-count" class="text-white/40 text-sm mt-1 font-semibold"></p>
+            </div>
+        </div>
+        <div id="loading-shows" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div class="show-card rounded-2xl overflow-hidden h-96 skeleton"></div>
+            <div class="show-card rounded-2xl overflow-hidden h-96 skeleton"></div>
+            <div class="show-card rounded-2xl overflow-hidden h-96 skeleton"></div>
+        </div>
+        <div id="error-shows" class="hidden text-center py-20">
+            <div class="text-5xl mb-4">😕</div>
+            <p class="text-white/50 font-bold">Não foi possível carregar os shows.</p>
+            <button onclick="carregarShows()" class="btn-glow mt-4 px-6 py-2 rounded-xl text-sm font-bold text-white">
+                Tentar novamente
+            </button>
+        </div>
+        <div id="lista-shows" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 hidden"></div>
+    </section>
+
+    <!-- ===================================== -->
+    <!-- CORREIO ELEGANTE + BARRACA DO BEIJO -->
+    <!-- ===================================== -->
+    <section id="correio-elegante" class="max-w-6xl mx-auto px-6 pb-24 relative z-10">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1 h-6 bg-pink rounded-full"></div>
+            <h2 class="text-sm font-bold text-white/50 uppercase tracking-widest">Correio Elegante & Barraca do Beijo
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- CORREIO ELEGANTE COM IA -->
+            <div class="modal-inner rounded-3xl p-6">
+                <div class="flex items-center gap-3 mb-5">
+                    <span class="text-4xl">💌</span>
+                    <div>
+                        <h3 class="font-display text-3xl text-white tracking-wide">Correio Elegante IA</h3>
+                        <p class="text-white/40 text-xs">Cantadas caipiras geradas por inteligência artificial</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3 mb-4">
+                    <input type="text" id="correio-para"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30"
+                        placeholder="Para quem é a cantada? (nome)">
+                    <select id="correio-estilo"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
+                        <option value="caipira" class="bg-card">🌽 Caipira Raiz</option>
+                        <option value="engracada" class="bg-card">😂 Engraçada</option>
+                        <option value="romantica" class="bg-card">🌹 Romântica</option>
+                        <option value="atacante" class="bg-card">🔥 Atacante</option>
+                        <option value="fofinha" class="bg-card">🧸 Fofinha</option>
+                    </select>
+                </div>
+
+                <button onclick="gerarCantada()" class="btn-pink-glow w-full text-white py-3 rounded-xl font-bold mb-4">
+                    ✨ Gerar Cantada com IA
+                </button>
+
+                <div id="cantada-resultado" class="hidden bg-white/5 rounded-xl p-4 border border-pink/20">
+                    <div class="flex items-start gap-3">
+                        <span class="text-3xl">🤖</span>
+                        <div>
+                            <p class="text-xs text-pink/70 font-semibold mb-1">Cantada Gerada:</p>
+                            <p id="cantada-texto" class="text-white/90 text-sm italic leading-relaxed"></p>
+                            <button onclick="enviarCantada()"
+                                class="mt-3 bg-pink/20 hover:bg-pink/30 text-pink-300 px-4 py-1.5 rounded-lg text-xs font-bold transition">
+                                📨 Enviar Cantada
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Histórico de cantadas -->
+                <div id="historico-cantadas" class="mt-4 space-y-2 max-h-40 overflow-y-auto"></div>
+            </div>
+
+            <!-- BARRACA DO BEIJO - CHAT E FILA VIRTUAL -->
+            <div class="modal-inner rounded-3xl p-6 flex flex-col">
+                <div class="flex items-center gap-3 mb-5">
+                    <span class="text-4xl">💋</span>
+                    <div>
+                        <h3 class="font-display text-3xl text-white tracking-wide">Barraca do Beijo</h3>
+                        <p class="text-white/40 text-xs">Chat direto • Agende seu horário na fila virtual</p>
+                    </div>
+                </div>
+
+                <!-- Status da fila -->
+                <div class="bg-white/5 rounded-xl p-4 mb-4 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-white/40">Fila Virtual</p>
+                        <p class="font-bold text-white text-lg">
+                            <span id="fila-posicao">--</span> pessoas na frente
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-white/40">Tempo estimado</p>
+                        <p id="fila-tempo" class="font-bold text-pink text-lg">-- min</p>
+                    </div>
+                </div>
+
+                <!-- Chat -->
+                <div id="chat-beijo"
+                    class="flex-1 bg-white/5 rounded-xl p-4 mb-4 max-h-48 overflow-y-auto space-y-3 min-h-[150px]">
+                    <div class="chat-message text-center">
+                        <span class="text-white/30 text-xs">💋 Bem-vindo à Barraca do Beijo!</span>
+                    </div>
+                    <div class="chat-message text-center">
+                        <span class="text-white/30 text-xs">Agende seu horário ou tire dúvidas 💕</span>
+                    </div>
+                </div>
+
+                <!-- Input do chat -->
+                <div class="flex gap-2">
+                    <input type="text" id="chat-input"
+                        class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 text-sm"
+                        placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')enviarMensagemBeijo()">
+                    <button onclick="enviarMensagemBeijo()"
+                        class="btn-pink-glow text-white px-5 py-3 rounded-xl font-bold text-sm">
+                        Enviar
+                    </button>
+                </div>
+
+                <!-- Botão agendar -->
+                <button onclick="agendarBeijo()" class="btn-glow w-full mt-3 text-white py-3 rounded-xl font-bold">
+                    📅 Agendar Horário na Fila Virtual
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===================================== -->
+    <!-- BARRAQUINHAS DE COMIDA -->
+    <!-- ===================================== -->
+    <section id="barraquinhas" class="max-w-6xl mx-auto px-6 pb-24 relative z-10">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-1 h-6 bg-green rounded-full"></div>
+            <h2 class="text-sm font-bold text-white/50 uppercase tracking-widest">Barraquinhas de Comida</h2>
+        </div>
+
+        <h2 class="font-display text-5xl text-white tracking-wide mb-8">
+            Mini Cardápio Junino
+        </h2>
+
+        <!-- Tabs de categorias de comida -->
+        <div class="flex gap-3 flex-wrap mb-8">
+            <button onclick="filtrarComidas('todas')" data-food-tab="todas"
+                class="tab-btn active bg-green text-white px-5 py-2.5 rounded-xl font-bold text-sm">
+                🍽️ Todas
+            </button>
+            <button onclick="filtrarComidas('salgadas')" data-food-tab="salgadas"
+                class="tab-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm">
+                🥟 Salgadas
+            </button>
+            <button onclick="filtrarComidas('doces')" data-food-tab="doces"
+                class="tab-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm">
+                🍰 Doces
+            </button>
+            <button onclick="filtrarComidas('bebidas')" data-food-tab="bebidas"
+                class="tab-btn bg-white/8 border border-white/10 text-white/80 px-5 py-2.5 rounded-xl font-bold text-sm">
+                🥤 Bebidas
+            </button>
+        </div>
+
+        <!-- Grid de comidas -->
+        <div id="grid-comidas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+
+        <!-- Carrinho de comidas -->
+        <div class="mt-8 modal-inner rounded-3xl p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-display text-2xl text-white tracking-wide">🛒 Pedido de Comidas</h3>
+                <span id="comidas-count" class="text-white/40 text-sm">0 itens</span>
+            </div>
+            <div id="carrinho-comidas-itens" class="space-y-2 max-h-48 overflow-y-auto mb-4"></div>
+            <div id="carrinho-comidas-vazio" class="text-center py-6 text-white/30 text-sm">
+                Adicione comidas ao seu pedido 🍴
+            </div>
+            <div class="flex justify-between items-center pt-4 border-t border-white/8">
+                <span class="font-display text-2xl text-green tracking-wide" id="total-comidas">R$ 0,00</span>
+                <button onclick="finalizarPedidoComida()"
+                    class="btn-green-glow text-white px-8 py-3 rounded-xl font-bold">
+                    Finalizar Pedido 🛍️
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================== -->
+    <!-- MODAL SHOW -->
+    <!-- ===================================== -->
+    <div id="modal-show" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden justify-center items-center p-4"
+        onclick="if(event.target===this)fecharModal()">
+        <div class="modal-inner max-w-xl w-full rounded-3xl overflow-hidden shadow-2xl">
+            <div class="relative">
+                <img id="modal-img" src="" class="w-full h-72 object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <button onclick="fecharModal()"
+                    class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white w-9 h-9 rounded-full flex items-center justify-center font-black text-lg hover:bg-black/80 transition">
+                    ×
+                </button>
+                <div class="absolute bottom-4 left-5">
+                    <span id="modal-categoria-badge" class="badge text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+            </div>
+            <div class="p-6">
+                <h2 id="modal-nome" class="font-display text-4xl text-white tracking-wide"></h2>
+                <p id="modal-descricao" class="text-white/50 mt-3 text-sm leading-relaxed"></p>
+                <div class="mt-5 grid grid-cols-3 gap-3">
+                    <div class="bg-white/5 rounded-xl p-3 text-center">
+                        <p class="text-xs text-white/40 mb-1">Local</p>
+                        <p id="modal-local" class="text-xs font-bold text-white/80"></p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-3 text-center">
+                        <p class="text-xs text-white/40 mb-1">Data</p>
+                        <p id="modal-data" class="text-xs font-bold text-white/80"></p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-3 text-center">
+                        <p class="text-xs text-white/40 mb-1">Horário</p>
+                        <p id="modal-horario" class="text-xs font-bold text-white/80"></p>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mt-6 pt-5 border-t border-white/8">
+                    <div>
+                        <p class="text-xs text-white/40 mb-0.5">A partir de</p>
+                        <span id="modal-preco" class="text-3xl font-display tracking-wider text-secondary"></span>
+                    </div>
+                    <button id="btn-comprar" class="btn-glow text-white px-7 py-3 rounded-xl font-bold text-sm">
+                        🎟️ Comprar Ingresso
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- MODAL CARRINHO -->
+    <!-- ===================================== -->
+    <div id="modal-carrinho"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden justify-center items-center p-4"
+        onclick="if(event.target===this)fecharCarrinho()">
+        <div class="modal-inner max-w-lg w-full rounded-3xl p-7 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="font-display text-4xl text-white tracking-wide">Seu Carrinho</h2>
+                    <p class="text-white/40 text-xs mt-0.5">Revise antes de finalizar</p>
+                </div>
+                <button onclick="fecharCarrinho()"
+                    class="bg-white/10 hover:bg-white/20 text-white w-9 h-9 rounded-full flex items-center justify-center font-black text-lg transition">
+                    ×
+                </button>
+            </div>
+            <div id="carrinho-vazio" class="hidden text-center py-12">
+                <div class="text-5xl mb-3">🛒</div>
+                <p class="text-white/40 font-semibold">Seu carrinho está vazio</p>
+            </div>
+            <div id="carrinho-itens" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
+            <div class="mt-6 border-t border-white/8 pt-5">
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-white/60">Total</span>
+                    <span id="total-carrinho" class="font-display text-4xl text-secondary tracking-wider">R$ 0</span>
+                </div>
+                <button onclick="finalizarCompra()" class="btn-glow w-full mt-5 text-white py-4 rounded-xl font-bold">
+                    Finalizar Compra 🎟️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- TOAST -->
+    <!-- ===================================== -->
+    <div id="toast"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] bg-green-900/90 border border-green-700/50 text-green-300 px-6 py-3.5 rounded-2xl font-bold text-sm backdrop-blur-md transition-all duration-300 opacity-0 translate-y-4 pointer-events-none">
+        🎟️ Ingresso adicionado ao carrinho!
+    </div>
+
+    <!-- ===================================== -->
+    <!-- FOOTER -->
+    <!-- ===================================== -->
+    <footer class="border-t border-white/6 relative z-10">
+        <div class="max-w-6xl mx-auto px-6 py-16">
+            <div class="flex flex-col md:flex-row justify-between gap-10">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-2xl">🎪</span>
+                        <span class="font-display text-2xl text-white tracking-wide">Arraiá Festival</span>
+                    </div>
+                    <p class="text-white/40 text-sm max-w-xs leading-relaxed">
+                        Os melhores shows juninos do Brasil, em um só lugar.
+                    </p>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <p class="text-xs text-white/30 uppercase tracking-widest font-bold mb-1">Contato</p>
+                    <p class="text-white/60 text-sm">📍 Sorocaba — SP</p>
+                    <p class="text-white/60 text-sm">📞 (15) 99999-9999</p>
+                    <p class="text-white/60 text-sm">📸 @arraiafestival</p>
+                </div>
+            </div>
+            <div class="border-t border-white/6 mt-12 pt-6 flex justify-between items-center">
+                <p class="text-white/20 text-xs">© 2025 Arraiá Festival. Todos os direitos reservados.</p>
+                <p class="text-white/20 text-xs">Made with 🧡 no Brasil</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===================================== -->
+    <!-- SCRIPTS -->
+    <!-- ===================================== -->
+    <script>
+        // =====================================
+        // API URL
+        // =====================================
+        const API_URL = 'https://arraial-app.vercel.app/api'
+
+        // =====================================
+        // ESTADO GLOBAL
+        // =====================================
+        let todosShows = []
+        let categoriaAtiva = ''
+        let carrinho = []
+        let carrinhoComidas = []
+        let usuarioLogado = null
+        let filaBeijo = []
+        let ultimoNumeroFila = 0
+
+        // =====================================
+        // CANTADAS CAIPIRAS (Banco de IA)
+        // =====================================
+        const cantadasDB = {
+            caipira: [
+                "Ô {nome}, cê é tão bonita que nem precisava de espantalho na roça, só sua beleza já espanta os passarinho! 🌽",
+                "{nome}, se ocê fosse milho, eu ficava o dia inteiro debuiando só pra te ver sorrir! 😍",
+                "Sô! {nome}, cê é mais gostosa que pamonha quentinha saindo do fogo! 🔥",
+                "{nome}, meu coração pula que nem pipoca na panela quando ocê passa! 💕",
+                "Uai, {nome}, cê é o doce de leite que faltava no meu pedaço de queijo! 🧀"
+            ],
+            engracada: [
+                "{nome}, eu não sou a TIM, mas quero você pra mim! 📱😂",
+                "{nome}, cê é tão linda que se beleza fosse crime, ocê tava presa na minha cela! 🚔",
+                "Me chama de fogão a lenha e vem me acender, {nome}! 🔥😆",
+                "{nome}, você não é pescoço, mas mexe com a minha cabeça! 🤪",
+                "Seu pai é padeiro, {nome}? Porque você é um sonho! 🥖😂"
+            ],
+            romantica: [
+                "{nome}, sob a luz da fogueira, teu olhar é mais brilhante que as estrelas do sertão! ✨",
+                "No arraial da vida, {nome}, você é a quadrilha que meu coração escolheu dançar pra sempre 💃",
+                "{nome}, teu sorriso ilumina mais que balão na noite de São João! 🎈",
+                "Se a vida é uma festa junina, {nome}, você é a prenda mais linda desse arraial 🌹",
+                "{nome}, contigo eu quero pular a fogueira do amor e nunca mais apagar essa chama 🔥"
+            ],
+            atacante: [
+                "{nome}, se prepare que hoje eu vou ser o milho e você a pamonha, porque eu vou te enrolar todinha! 🌽🔥",
+                "Ô {nome}, me fala uma coisa: tá doendo aí onde eu vou te beijar? 💋😏",
+                "{nome}, na roça ou na cidade, eu dou um jeito de te encontrar... e de te beijar também! 😘",
+                "Cê é o quentão mais quente que eu já provei, {nome}! 🍷🔥",
+                "{nome}, essa noite a fogueira não vai ser a única coisa queimando! 🔥😈"
+            ],
+            fofinha: [
+                "{nome}, cê é tão fofa que dá vontade de guardar num potinho de doce de abóbora! 🎃🧸",
+                "Oi {nome}, meu coração derreteu que nem marshmallow na fogueira quando te viu! 🍡",
+                "{nome}, ocê é o algodão doce mais colorido desse parque inteirinho! 🌈",
+                "Seu abraço deve ser mais quentinho que cobertor em noite de frio na roça, {nome} 🥰",
+                "{nome}, teu jeitinho caipira me fez querer casar na igrejinha da matriz! ⛪💒"
+            ]
+        }
+
+        function gerarCantada() {
+            const nome = document.getElementById('correio-para').value.trim() || 'crush'
+            const estilo = document.getElementById('correio-estilo').value
+            const cantadas = cantadasDB[estilo]
+            const cantada = cantadas[Math.floor(Math.random() * cantadas.length)].replace('{nome}', nome)
+
+            document.getElementById('cantada-resultado').classList.remove('hidden')
+            document.getElementById('cantada-texto').textContent = cantada
+
+            // Salva no histórico
+            const historico = document.getElementById('historico-cantadas')
+            const item = document.createElement('div')
+            item.className = 'chat-message bg-white/5 rounded-lg p-3 text-xs text-white/70'
+            item.innerHTML = `<span class="text-pink/70 font-bold">Para ${nome}:</span> "${cantada}"`
+            historico.insertBefore(item, historico.firstChild)
+
+            // Efeito de corações flutuantes
+            criarCoracoesFlutuantes()
+        }
+
+        function enviarCantada() {
+            const cantada = document.getElementById('cantada-texto').textContent
+            if (cantada) {
+                mostrarToast('💌 Cantada enviada com sucesso!')
+                criarCoracoesFlutuantes()
+            }
+        }
+
+        function criarCoracoesFlutuantes() {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div')
+                    heart.className = 'floating-heart text-2xl'
+                    heart.textContent = ['💕', '❤️', '💖', '💘', '💝', '🌹', '💗', '✨'][i]
+                    heart.style.left = Math.random() * 80 + 10 + '%'
+                    heart.style.top = Math.random() * 40 + 50 + '%'
+                    document.body.appendChild(heart)
+                    setTimeout(() => heart.remove(), 1500)
+                }, i * 100)
+            }
+        }
+
+        // =====================================
+        // BARRACA DO BEIJO
+        // =====================================
+        function enviarMensagemBeijo() {
+            const input = document.getElementById('chat-input')
+            const msg = input.value.trim()
+            if (!msg) return
+
+            const chat = document.getElementById('chat-beijo')
+
+            // Mensagem do usuário
+            const userMsg = document.createElement('div')
+            userMsg.className = 'chat-message flex justify-end'
+            userMsg.innerHTML = `<div class="bg-pink/20 rounded-xl px-4 py-2 max-w-[80%] text-sm text-white/90">${msg}</div>`
+            chat.appendChild(userMsg)
+
+            input.value = ''
+            chat.scrollTop = chat.scrollHeight
+
+            // Resposta automática da Barraca do Beijo
+            setTimeout(() => {
+                const respostas = [
+                    '💋 Oiê! Já já alguém te atende, viu?',
+                    '🌹 Que amor! Quer agendar um horário?',
+                    '💕 Aqui na barraca do beijo, o amor está no ar!',
+                    '😘 Tem vaga na fila virtual! Quer garantir seu beijo?',
+                    '💝 Anotado! Vou separar um beijo bem especial pra você!'
+                ]
+                const resposta = respostas[Math.floor(Math.random() * respostas.length)]
+                const botMsg = document.createElement('div')
+                botMsg.className = 'chat-message flex justify-start'
+                botMsg.innerHTML = `<div class="bg-white/10 rounded-xl px-4 py-2 max-w-[80%] text-sm text-white/80">${resposta}</div>`
+                chat.appendChild(botMsg)
+                chat.scrollTop = chat.scrollHeight
+            }, 800)
+        }
+
+        function agendarBeijo() {
+            ultimoNumeroFila++
+            const nome = usuarioLogado?.nome || 'Visitante'
+            const senha = ultimoNumeroFila
+            filaBeijo.push({ nome, senha, horario: new Date().toLocaleTimeString() })
+
+            document.getElementById('fila-posicao').textContent = filaBeijo.length
+            document.getElementById('fila-tempo').textContent = Math.max(1, filaBeijo.length * 3)
+
+            const chat = document.getElementById('chat-beijo')
+            const msg = document.createElement('div')
+            msg.className = 'chat-message text-center'
+            msg.innerHTML = `<span class="text-pink/80 text-xs font-bold">💋 Agendado! Senha #${senha} • Aguarde ${filaBeijo.length} pessoa(s)</span>`
+            chat.appendChild(msg)
+            chat.scrollTop = chat.scrollHeight
+
+            mostrarToast(`💋 Agendado! Sua senha é #${senha}`)
+        }
+
+        // =====================================
+        // BARRAQUINHAS DE COMIDA
+        // =====================================
+        const cardapio = [
+            { id: 1, nome: 'Pamonha', preco: 12.00, categoria: 'salgadas', emoji: '🌽', desc: 'Pamonha cremosa com queijo' },
+            { id: 2, nome: 'Curau', preco: 10.00, categoria: 'doces', emoji: '🥣', desc: 'Curau de milho verde cremoso' },
+            { id: 3, nome: 'Quentão', preco: 8.00, categoria: 'bebidas', emoji: '🍷', desc: 'Quentão com especiarias' },
+            { id: 4, nome: 'Vinagrete', preco: 7.00, categoria: 'salgadas', emoji: '🥗', desc: 'Vinagrete fresquinho' },
+            { id: 5, nome: 'Canjica', preco: 10.00, categoria: 'doces', emoji: '🥥', desc: 'Canjica com leite condensado' },
+            { id: 6, nome: 'Caldo Verde', preco: 14.00, categoria: 'salgadas', emoji: '🍲', desc: 'Caldo verde com calabresa' },
+            { id: 7, nome: 'Bolo de Milho', preco: 9.00, categoria: 'doces', emoji: '🍰', desc: 'Bolo de milho caseiro' },
+            { id: 8, nome: 'Suco de Milho', preco: 7.00, categoria: 'bebidas', emoji: '🥤', desc: 'Suco de milho gelado' },
+            { id: 9, nome: 'Cachorro-Quente', preco: 15.00, categoria: 'salgadas', emoji: '🌭', desc: 'Com molho especial da casa' },
+            { id: 10, nome: 'Pé de Moleque', preco: 6.00, categoria: 'doces', emoji: '🥜', desc: 'Pé de moleque crocante' },
+            { id: 11, nome: 'Chocolate Quente', preco: 9.00, categoria: 'bebidas', emoji: '☕', desc: 'Com chantilly e canela' },
+            { id: 12, nome: 'Espetinho', preco: 16.00, categoria: 'salgadas', emoji: '🍢', desc: 'Espetinho de carne com farofa' }
+        ]
+
+        let comidaFiltroAtivo = 'todas'
+
+        function filtrarComidas(cat) {
+            comidaFiltroAtivo = cat
+            document.querySelectorAll('[data-food-tab]').forEach(b => {
+                b.classList.toggle('active', b.dataset.foodTab === cat)
+                b.classList.toggle('bg-green', b.dataset.foodTab === cat)
+                b.classList.toggle('text-white', b.dataset.foodTab === cat)
+                b.classList.toggle('bg-white/8', b.dataset.foodTab !== cat)
+                b.classList.toggle('border', b.dataset.foodTab !== cat)
+                b.classList.toggle('border-white/10', b.dataset.foodTab !== cat)
+                b.classList.toggle('text-white/80', b.dataset.foodTab !== cat)
+            })
+            renderizarComidas()
+        }
+
+        function renderizarComidas() {
+            const grid = document.getElementById('grid-comidas')
+            const comidas = comidaFiltroAtivo === 'todas'
+                ? cardapio
+                : cardapio.filter(c => c.categoria === comidaFiltroAtivo)
+
+            grid.innerHTML = comidas.map(c => `
+                <div class="food-card rounded-2xl p-5 flex flex-col">
+                    <div class="text-5xl mb-3 text-center">${c.emoji}</div>
+                    <h3 class="font-bold text-white text-center">${c.nome}</h3>
+                    <p class="text-white/40 text-xs text-center mt-1 mb-3">${c.desc}</p>
+                    <div class="mt-auto flex justify-between items-center pt-3 border-t border-white/6">
+                        <span class="font-display text-xl text-green tracking-wide">R$ ${c.preco.toFixed(2)}</span>
+                        <button onclick="adicionarComida(${c.id})"
+                            class="bg-green/20 hover:bg-green/30 text-green-300 px-4 py-2 rounded-lg text-xs font-bold transition">
+                            + Adicionar
+                        </button>
+                    </div>
+                </div>
+            `).join('')
+        }
+
+        function adicionarComida(id) {
+            const comida = cardapio.find(c => c.id === id)
+            if (!comida) return
+
+            const existente = carrinhoComidas.find(c => c.id === id)
+            if (existente) {
+                existente.qtd++
+            } else {
+                carrinhoComidas.push({ ...comida, qtd: 1 })
+            }
+            atualizarCarrinhoComidas()
+            mostrarToast(`🍴 ${comida.nome} adicionado!`)
+        }
+
+        function removerComida(index) {
+            if (carrinhoComidas[index].qtd > 1) {
+                carrinhoComidas[index].qtd--
+            } else {
+                carrinhoComidas.splice(index, 1)
+            }
+            atualizarCarrinhoComidas()
+        }
+
+        function atualizarCarrinhoComidas() {
+            const container = document.getElementById('carrinho-comidas-itens')
+            const vazio = document.getElementById('carrinho-comidas-vazio')
+            const totalEl = document.getElementById('total-comidas')
+            const countEl = document.getElementById('comidas-count')
+
+            let totalQtd = 0
+            let totalValor = 0
+
+            container.innerHTML = carrinhoComidas.map((c, i) => {
+                totalQtd += c.qtd
+                totalValor += c.preco * c.qtd
+                return `
+                    <div class="flex justify-between items-center bg-white/5 rounded-xl p-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">${c.emoji}</span>
+                            <div>
+                                <p class="font-bold text-white text-sm">${c.nome} <span class="text-white/40">x${c.qtd}</span></p>
+                                <p class="text-green text-xs">R$ ${(c.preco * c.qtd).toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <button onclick="removerComida(${i})" class="text-red-400 hover:text-red-300 text-xs font-bold transition">
+                            ✕
+                        </button>
+                    </div>
+                `
+            }).join('')
+
+            countEl.textContent = `${totalQtd} item(ns)`
+            totalEl.textContent = `R$ ${totalValor.toFixed(2)}`
+
+            if (carrinhoComidas.length === 0) {
+                vazio.classList.remove('hidden')
+                container.innerHTML = ''
+            } else {
+                vazio.classList.add('hidden')
+            }
+        }
+
+        function finalizarPedidoComida() {
+            if (carrinhoComidas.length === 0) {
+                mostrarToast('🍽️ Adicione itens ao pedido!')
+                return
+            }
+            mostrarToast('🛍️ Pedido realizado com sucesso!')
+            carrinhoComidas = []
+            atualizarCarrinhoComidas()
+        }
+
+        // =====================================
+        // SPLASH / LOGIN / CADASTRO
+        // =====================================
+        function pularSplash() {
+            document.getElementById('splash-screen').classList.add('hidden')
+        }
+
+        function mostrarLogin() {
+            document.getElementById('modal-login').classList.replace('hidden', 'flex')
+        }
+
+        function fecharLogin() {
+            document.getElementById('modal-login').classList.replace('flex', 'hidden')
+        }
+
+        function mostrarCadastro() {
+            document.getElementById('modal-cadastro').classList.replace('hidden', 'flex')
+        }
+
+        function fecharCadastro() {
+            document.getElementById('modal-cadastro').classList.replace('flex', 'hidden')
+        }
+
+        function fazerLogin(e) {
+            e.preventDefault()
+            const email = document.getElementById('login-email').value
+            const nome = email.split('@')[0]
+            usuarioLogado = { nome, email }
+            fecharLogin()
+            pularSplash()
+            mostrarToast(`🎪 Bem-vindo, ${nome}!`)
+        }
+
+        function fazerCadastro(e) {
+            e.preventDefault()
+            const nome = document.getElementById('cadastro-nome').value
+            const email = document.getElementById('cadastro-email').value
+            usuarioLogado = { nome, email }
+            fecharCadastro()
+            pularSplash()
+            mostrarToast(`✨ Conta criada! Bem-vindo, ${nome}!`)
+        }
+
+        // =====================================
+        // TOAST
+        // =====================================
+        function mostrarToast(msg = '🎟️ Ingresso adicionado!') {
+            const t = document.getElementById('toast')
+            t.textContent = msg
+            t.classList.remove('opacity-0', 'translate-y-4')
+            t.classList.add('opacity-100', 'translate-y-0')
+            setTimeout(() => {
+                t.classList.add('opacity-0', 'translate-y-4')
+                t.classList.remove('opacity-100', 'translate-y-0')
+            }, 2500)
+        }
+
+        // =====================================
+        // FOGUEIRA QUE SEGUE O MOUSE
+        // =====================================
+        const fogueira = document.getElementById('fogueira-mouse');
+        let mouseX = 0, mouseY = 0;
+        let fogueiraX = 0, fogueiraY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animarFogueira() {
+            // Interpolação suave (lerp)
+            fogueiraX += (mouseX - fogueiraX) * 0.08;
+            fogueiraY += (mouseY - fogueiraY) * 0.08;
+
+            fogueira.style.left = fogueiraX + 'px';
+            fogueira.style.top = (fogueiraY - 40) + 'px'; // 40px acima do cursor
+
+            requestAnimationFrame(animarFogueira);
+        }
+
+        // Esconde fogueira em dispositivos móveis (touch)
+        if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+            fogueira.style.display = 'none';
+        } else {
+            fogueira.style.display = 'block';
+            animarFogueira();
+        }
+
+        // Mostra/esconde fogueira ao entrar/sair da página
+        document.addEventListener('mouseleave', () => {
+            fogueira.style.opacity = '0';
+            fogueira.style.transition = 'opacity 0.3s';
+        });
+
+        document.addEventListener('mouseenter', () => {
+            fogueira.style.opacity = '1';
+            fogueira.style.transition = 'opacity 0.3s';
+        });
+
+        // =====================================
+        // CARREGAR SHOWS
+        // =====================================
+        async function carregarShows() {
+            document.getElementById('loading-shows').classList.remove('hidden')
+            document.getElementById('lista-shows').classList.add('hidden')
+            document.getElementById('error-shows').classList.add('hidden')
+
+            try {
+                const res = await fetch(`${API_URL}/agenda`)
+                if (!res.ok) throw new Error('Erro ' + res.status)
+                todosShows = await res.json()
+                document.getElementById('loading-shows').classList.add('hidden')
+                document.getElementById('lista-shows').classList.remove('hidden')
+                renderizarShows(todosShows)
+            } catch (err) {
+                console.error(err)
+                document.getElementById('loading-shows').classList.add('hidden')
+                document.getElementById('error-shows').classList.remove('hidden')
+            }
+        }
+
+        function filtrarCategoria(cat) {
+            categoriaAtiva = cat
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                const isActive = b.dataset.cat === cat
+                b.classList.toggle('active', isActive)
+                b.classList.toggle('bg-secondary', isActive)
+                b.classList.toggle('text-white', isActive)
+                b.classList.toggle('bg-white/8', !isActive)
+                b.classList.toggle('border', !isActive)
+                b.classList.toggle('border-white/10', !isActive)
+                b.classList.toggle('text-white/80', !isActive)
+            })
+            const filtrados = cat ? todosShows.filter(s => s.categoria === cat) : todosShows
+            renderizarShows(filtrados)
+        }
+
+        function renderizarShows(shows) {
+            const lista = document.getElementById('lista-shows')
+            const count = document.getElementById('shows-count')
+            lista.innerHTML = ''
+            count.textContent = `${shows.length} show${shows.length !== 1 ? 's' : ''} encontrado${shows.length !== 1 ? 's' : ''}`
+
+            if (shows.length === 0) {
+                lista.innerHTML = `
+                    <div class="col-span-3 text-center py-20">
+                        <div class="text-5xl mb-3">🎭</div>
+                        <p class="text-white/40 font-semibold">Nenhum show nessa categoria.</p>
+                    </div>
+                `
+                return
+            }
+
+            shows.forEach(show => {
+                const card = document.createElement('div')
+                card.className = 'show-card rounded-2xl overflow-hidden cursor-pointer'
+                card.onclick = () => abrirModal(show)
+                card.innerHTML = `
+                    <div class="overflow-hidden h-56">
+                        <img src="${show.imagem}" alt="${show.nome}"
+                            class="w-full h-full object-cover"
+                            onerror="this.src='https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800'">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-start justify-between gap-2 mb-3">
+                            <h3 class="font-display text-3xl text-white tracking-wide leading-none">${show.nome}</h3>
+                            <span class="badge text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap shrink-0">${show.categoria}</span>
+                        </div>
+                        <p class="text-white/40 text-sm leading-relaxed line-clamp-2">${show.descricao || ''}</p>
+                        <div class="mt-4 space-y-1.5">
+                            <p class="text-xs font-semibold text-white/60">📍 ${show.local_show || '—'}</p>
+                            <p class="text-xs text-white/40">🗓️ ${show.data_show || '—'} &nbsp; ⏰ ${show.horario || '—'}</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-5 pt-4 border-t border-white/6">
+                            <span class="font-display text-3xl text-secondary tracking-wide">R$ ${Number(show.preco).toFixed(2)}</span>
+                            <button onclick="event.stopPropagation(); abrirModal(${JSON.stringify(show).replace(/"/g, '&quot;')})"
+                                class="btn-glow text-white px-5 py-2.5 rounded-xl font-bold text-sm">
+                                Comprar
+                            </button>
+                        </div>
+                    </div>
+                `
+                lista.appendChild(card)
+            })
+        }
+
+        function abrirModal(show) {
+            document.getElementById('modal-show').classList.replace('hidden', 'flex')
+            document.getElementById('modal-img').src = show.imagem
+            document.getElementById('modal-nome').textContent = show.nome
+            document.getElementById('modal-categoria-badge').textContent = show.categoria
+            document.getElementById('modal-descricao').textContent = show.descricao || ''
+            document.getElementById('modal-local').textContent = show.local_show || '—'
+            document.getElementById('modal-data').textContent = show.data_show || '—'
+            document.getElementById('modal-horario').textContent = show.horario || '—'
+            document.getElementById('modal-preco').textContent = `R$ ${Number(show.preco).toFixed(2)}`
+            document.getElementById('btn-comprar').onclick = () => adicionarCarrinho(show)
+        }
+
+        function fecharModal() {
+            document.getElementById('modal-show').classList.replace('flex', 'hidden')
+        }
+
+        function adicionarCarrinho(show) {
+            carrinho.push(show)
+            atualizarCarrinho()
+            fecharModal()
+            mostrarToast('🎟️ Ingresso adicionado ao carrinho!')
+        }
+
+        function atualizarCarrinho() {
+            const container = document.getElementById('carrinho-itens')
+            const vazio = document.getElementById('carrinho-vazio')
+            const countEl = document.getElementById('cart-count')
+
+            container.innerHTML = ''
+
+            if (carrinho.length === 0) {
+                vazio.classList.remove('hidden')
+                countEl.style.display = 'none'
+            } else {
+                vazio.classList.add('hidden')
+                countEl.style.display = 'flex'
+                countEl.textContent = carrinho.length
+            }
+
+            let total = 0
+            carrinho.forEach((item, i) => {
+                total += Number(item.preco)
+                container.innerHTML += `
+                    <div class="flex justify-between items-center bg-white/5 rounded-xl p-4">
+                        <div>
+                            <h3 class="font-bold text-white">${item.nome}</h3>
+                            <p class="text-white/40 text-xs mt-0.5">${item.data_show || ''} · ${item.local_show || ''}</p>
+                        </div>
+                        <div class="text-right ml-4">
+                            <p class="font-display text-xl text-secondary">R$ ${Number(item.preco).toFixed(2)}</p>
+                            <button onclick="removerItem(${i})" class="text-xs text-red-400 hover:text-red-300 mt-1 transition">Remover</button>
+                        </div>
+                    </div>
+                `
+            })
+
+            document.getElementById('total-carrinho').textContent = `R$ ${total.toFixed(2)}`
+        }
+
+        function removerItem(index) {
+            carrinho.splice(index, 1)
+            atualizarCarrinho()
+        }
+
+        function abrirCarrinho() {
+            document.getElementById('modal-carrinho').classList.replace('hidden', 'flex')
+        }
+
+        function fecharCarrinho() {
+            document.getElementById('modal-carrinho').classList.replace('flex', 'hidden')
+        }
+
+        function finalizarCompra() {
+            if (carrinho.length === 0) {
+                mostrarToast('🛒 Carrinho vazio!')
+                return
+            }
+            mostrarToast('🎉 Compra realizada com sucesso!')
+            carrinho = []
+            atualizarCarrinho()
+            fecharCarrinho()
+        }
+
+        // =====================================
+        // INICIAR
+        // =====================================
+        carregarShows()
+        renderizarComidas()
+    </script>
+
+</body>
+
+</html>
