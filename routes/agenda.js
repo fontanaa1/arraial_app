@@ -1,7 +1,5 @@
 const express = require('express')
-
 const router = express.Router()
-
 const supabase = require('../data/supabase')
 
 // =====================================
@@ -10,18 +8,24 @@ const supabase = require('../data/supabase')
 
 router.get('/', async (req, res) => {
 
-   const { data, error } = await supabase
-  .from('shows')
-  .select(`
-    *,
-    categorias ( nome )
-  `)
-    if(error){
+    const { data, error } = await supabase
+        .from('shows')
+        .select(`
+            *,
+            categorias ( nome )
+        `)
 
+    if (error) {
         return res.status(500).json(error)
     }
 
-    res.json(data)
+    // Mapeia categoria para manter compatibilidade com o HTML
+    const shows = data.map(s => ({
+        ...s,
+        categoria: s.categorias?.nome
+    }))
+
+    res.json(shows)
 })
 
 // =====================================
@@ -34,16 +38,20 @@ router.get('/:id', async (req, res) => {
 
     const { data, error } = await supabase
         .from('shows')
-        .select('*')
+        .select(`
+            *,
+            categorias ( nome )
+        `)
         .eq('id', id)
         .single()
 
-    if(error){
-
+    if (error) {
         return res.status(500).json(error)
     }
 
-    res.json(data)
+    const show = { ...data, categoria: data.categorias?.nome }
+
+    res.json(show)
 })
 
 module.exports = router
