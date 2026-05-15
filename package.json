@@ -8,7 +8,6 @@
   "name": "backend_f",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -16,5 +15,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "APP de festa junina com banco funcional no SUPABASE e front hospedado."
 }

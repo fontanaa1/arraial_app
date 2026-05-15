@@ -1,74 +1,41 @@
-const express = require('express');
+const express = require('express')
+const router = express.Router()
+const supabase = require('../data/supabase')
 
-const router = express.Router();
+// =====================================
+// CADASTRO
+// =====================================
 
-const supabase = require('../data/supabase');
+router.post('/cadastro', async (req, res) => {
 
-router.post('/', async (req, res, next) => {
+    const { email, senha } = req.body
 
-    try {
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password: senha
+    })
 
-        const {
-            nome,
-            email,
-            senha
-        } = req.body;
+    if (error) return res.status(400).json({ erro: error.message })
 
+    res.json({ mensagem: 'Cadastro realizado!', usuario: data.user })
+})
 
-        const { data, error } = await supabase
-            .from('usuarios')
-            .insert([
-                {
-                    nome,
-                    email,
-                    senha
-                }
-            ])
-            .select();
+// =====================================
+// LOGIN
+// =====================================
 
+router.post('/login', async (req, res) => {
 
-        if (error) throw error;
+    const { email, senha } = req.body
 
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password: senha
+    })
 
-        res.status(201).json({
-            sucesso: true,
-            usuario: data[0]
-        });
+    if (error) return res.status(400).json({ erro: error.message })
 
-    } catch (err) {
+    res.json({ mensagem: 'Login realizado!', session: data.session })
+})
 
-        next(err);
-
-    }
-
-});
-
-
-router.get('/:email', async (req, res, next) => {
-
-    try {
-
-        const { email } = req.params;
-
-        const { data, error } = await supabase
-            .from('usuarios')
-            .select('*')
-            .eq('email', email)
-            .maybeSingle();
-
-        if (error) throw error;
-
-        res.json({
-            sucesso: true,
-            usuario: data
-        });
-
-    } catch (err) {
-
-        next(err);
-
-    }
-
-});
-
-module.exports = router;
+module.exports = router
